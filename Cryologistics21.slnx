@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+  </Folder>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Common/">
+    <Project Path="src/Common/Cryologistics21.Common.Application/Cryologistics21.Common.Application.csproj" Id="7fa791c8-80dd-417d-875d-abf7c73b98cf" />
+    <Project Path="src/Common/Cryologistics21.Common.Domain/Cryologistics21.Common.Domain.csproj" Id="13651cfa-9339-4168-b260-89e409fdfd07" />
+    <Project Path="src/Common/Cryologistics21.Common.Infrastructure/Cryologistics21.Common.Infrastructure.csproj" Id="f16bb833-2972-4560-aa62-fd5b0010a4a5" />
+    <Project Path="src/Common/Cryologistics21.Common.Presentation/Cryologistics21.Common.Presentation.csproj" Id="379a06fe-5192-4680-8395-bdc7afe46bb2" />
+  </Folder>
+</Solution>
