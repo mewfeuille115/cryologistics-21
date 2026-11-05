@@ -38,11 +38,13 @@ public static class InfrastructureConfiguration
 
 		services.TryAddSingleton<IDateTimeProvider, DateTimeProvider>();
 
-		services.AddQuartz(configurator =>
+		services.AddQuartz(quartz =>
 		{
-			var scheduler = Guid.NewGuid();
-			configurator.SchedulerId = $"default-id-{scheduler}";
-			configurator.SchedulerName = $"default-name-{scheduler}";
+			quartz.ConfigureScheduler(options =>
+			{
+				options.InstanceName = "Cryologistics21";
+				options.GenerateInstanceId = true;
+			});
 		});
 		services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
 
@@ -56,7 +58,7 @@ public static class InfrastructureConfiguration
 				options.ConnectionMultiplexerFactory = () => Task.FromResult(connectionMultiplexer);
 			});
 		}
-		catch
+		catch (RedisConnectionException)
 		{
 			services.AddDistributedMemoryCache();
 		}

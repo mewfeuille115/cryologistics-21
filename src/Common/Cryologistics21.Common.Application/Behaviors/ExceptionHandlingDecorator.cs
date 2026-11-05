@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Cryologistics21.Common.Application.Behaviors;
 
-internal static class ExceptionHandlingDecorator
+internal static partial class ExceptionHandlingDecorator
 {
 	internal sealed class CommandHandler<TCommand>(
 			ICommandHandler<TCommand> inner,
@@ -21,7 +21,11 @@ internal static class ExceptionHandlingDecorator
 			}
 			catch (Exception exception)
 			{
-				logger.LogError(exception, "Unhandled exception for {CommandName}.", typeof(TCommand).Name);
+				LogUnhandledException(
+					logger,
+					exception,
+					typeof(TCommand).Name);
+
 				throw new Cryologistics21Exception(typeof(TCommand).Name, innerException: exception);
 			}
 		}
@@ -41,7 +45,10 @@ internal static class ExceptionHandlingDecorator
 			}
 			catch (Exception exception)
 			{
-				logger.LogError(exception, "Unhandled exception for {RequestName}", typeof(TCommand).Name);
+				LogUnhandledException(
+					logger,
+					exception,
+					typeof(TCommand).Name);
 
 				throw new Cryologistics21Exception(typeof(TCommand).Name, innerException: exception);
 			}
@@ -62,9 +69,19 @@ internal static class ExceptionHandlingDecorator
 			}
 			catch (Exception exception)
 			{
-				logger.LogError(exception, "Unhandled exception for {QueryName}.", typeof(TQuery).Name);
+				LogUnhandledException(
+					logger,
+					exception,
+					typeof(TQuery).Name);
+
 				throw new Cryologistics21Exception(typeof(TQuery).Name, innerException: exception);
 			}
 		}
 	}
+
+	[LoggerMessage(Level = LogLevel.Error, Message = "Unhandled exception for {HandlerName}.")]
+	private static partial void LogUnhandledException(
+	   ILogger logger,
+	   Exception exception,
+	   string handlerName);
 }

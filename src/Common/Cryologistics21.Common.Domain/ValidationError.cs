@@ -1,17 +1,21 @@
-﻿namespace Cryologistics21.Common.Domain;
+﻿using System.Collections.ObjectModel;
 
-public sealed record ValidationError : Error
+namespace Cryologistics21.Common.Domain;
+
+public sealed record ValidationError : DomainError
 {
-	public ValidationError(Error[] errors)
+	private readonly ReadOnlyCollection<DomainError> _errors;
+
+	public ValidationError(DomainError[] errors)
 		: base(
 			"General.Validation",
 			"One or more validation errors occurred",
 			ErrorType.Validation)
 	{
-		Errors = errors;
+		_errors = Array.AsReadOnly([.. errors]);
 	}
 
-	public Error[] Errors { get; }
+	public IReadOnlyList<DomainError> Errors => _errors;
 
 	public static ValidationError FromResults(IEnumerable<Result> results) =>
 		new([.. results.Where(r => r.IsFailure).Select(r => r.Error)]);

@@ -70,5 +70,5 @@ internal static class ValidationDecorator
 	}
 
 	private static ValidationError CreateValidationError(ValidationFailure[] validationFailures) =>
-		new([.. validationFailures.Select(f => Error.Problem(f.ErrorCode, f.ErrorMessage))]);
+		new([.. validationFailures.Select(f => DomainError.Problem(f.ErrorCode, f.ErrorMessage))]);
 }

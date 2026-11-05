@@ -5,10 +5,25 @@
     <File Path="Directory.Packages.props" />
   </Folder>
   <Folder Name="/src/" />
+  <Folder Name="/src/API/">
+    <Project Path="src/API/Cryologistics21.AppHost/Cryologistics21.AppHost.csproj" Id="3d322a92-fb7a-4680-a4cd-94b3d9575647" />
+  </Folder>
   <Folder Name="/src/Common/">
     <Project Path="src/Common/Cryologistics21.Common.Application/Cryologistics21.Common.Application.csproj" Id="7fa791c8-80dd-417d-875d-abf7c73b98cf" />
     <Project Path="src/Common/Cryologistics21.Common.Domain/Cryologistics21.Common.Domain.csproj" Id="13651cfa-9339-4168-b260-89e409fdfd07" />
     <Project Path="src/Common/Cryologistics21.Common.Infrastructure/Cryologistics21.Common.Infrastructure.csproj" Id="f16bb833-2972-4560-aa62-fd5b0010a4a5" />
     <Project Path="src/Common/Cryologistics21.Common.Presentation/Cryologistics21.Common.Presentation.csproj" Id="379a06fe-5192-4680-8395-bdc7afe46bb2" />
+    <Project Path="src/Common/Cryologistics21.Common.ServiceDefaults/Cryologistics21.Common.ServiceDefaults.csproj" />
+  </Folder>
+  <Folder Name="/src/Services/" />
+  <Folder Name="/src/Services/Users/">
+    <Project Path="src/Services/Users/Cryologistics21.Services.Users.Api/Cryologistics21.Services.Users.Api.csproj" Id="0797de87-aa42-4522-b2a5-7431aadf6d3b" />
+    <Project Path="src/Services/Users/Cryologistics21.Services.Users.Application/Cryologistics21.Services.Users.Application.csproj" Id="2c2bf0ae-70ea-426b-bfb8-2da8eb2990e1" />
+    <Project Path="src/Services/Users/Cryologistics21.Services.Users.Domain/Cryologistics21.Services.Users.Domain.csproj" Id="1e427f2e-5ac2-4ff0-a72a-ab1194a2adbe" />
+    <Project Path="src/Services/Users/Cryologistics21.Services.Users.Infrastructure/Cryologistics21.Services.Users.Infrastructure.csproj" Id="32b63c10-c7b0-4c3a-beaf-506b38382c64" />
+    <Project Path="src/Services/Users/Cryologistics21.Services.Users.Presentation/Cryologistics21.Services.Users.Presentation.csproj" Id="ed1b6340-37c1-4540-8b40-3749af8c94b2" />
+  </Folder>
+  <Folder Name="/src/Services/Users/test/">
+    <Project Path="src/Services/Users/Cryologistics21.Services.Users.UnitTests/Cryologistics21.Services.Users.UnitTests.csproj" Id="eeaa586c-8071-4fae-8f2c-39ffad9bfcb3" />
   </Folder>
 </Solution>

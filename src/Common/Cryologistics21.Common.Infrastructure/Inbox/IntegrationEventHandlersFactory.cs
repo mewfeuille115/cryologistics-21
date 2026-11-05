@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Reflection;
-using Cryologistics21.Common.Infrastructure.EventBus;
+using Cryologistics21.Common.Application.EventBus;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Cryologistics21.Common.Infrastructure.Inbox;

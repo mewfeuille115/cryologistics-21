@@ -6,7 +6,7 @@ public sealed class Cryologistics21Exception : Exception
 {
 	public Cryologistics21Exception(
 		string requestName,
-		Error? error = default,
+		DomainError? error = default,
 		Exception? innerException = default)
 		: base("Application exception", innerException)
 	{
@@ -15,5 +15,5 @@ public sealed class Cryologistics21Exception : Exception
 	}
 
 	public string RequestName { get; }
-	public Error? Error { get; }
+	public DomainError? Error { get; }
 }

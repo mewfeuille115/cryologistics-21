@@ -1,0 +1,7 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\Cryologistics21.Common.Infrastructure\Cryologistics21.Common.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\Common\Cryologistics21.Common.Presentation\Cryologistics21.Common.Presentation.csproj" />
+    <ProjectReference Include="..\Cryologistics21.Services.Users.Application\Cryologistics21.Services.Users.Application.csproj" />
+  </ItemGroup>
+</Project>

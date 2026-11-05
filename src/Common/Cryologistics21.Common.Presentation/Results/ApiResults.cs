@@ -19,7 +19,7 @@ public static class ApiResults
 			statusCode: GetStatusCode(result.Error.Type),
 			extensions: GetErrors(result));
 
-		static string GetTitle(Error error) =>
+		static string GetTitle(DomainError error) =>
 			error.Type switch
 			{
 				ErrorType.Validation => error.Code,
@@ -29,7 +29,7 @@ public static class ApiResults
 				_ => "Server failure"
 			};
 
-		static string GetDetail(Error error) =>
+		static string GetDetail(DomainError error) =>
 			error.Type switch
 			{
 				ErrorType.Validation => error.Description,
