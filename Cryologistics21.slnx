@@ -26,4 +26,10 @@
   <Folder Name="/src/Services/Users/test/">
     <Project Path="src/Services/Users/Cryologistics21.Services.Users.UnitTests/Cryologistics21.Services.Users.UnitTests.csproj" Id="eeaa586c-8071-4fae-8f2c-39ffad9bfcb3" />
   </Folder>
+  <Folder Name="/src/UI/">
+    <Project Path="src/UI/cryologistics21/cryologistics21.esproj">
+      <Build />
+      <Deploy />
+    </Project>
+  </Folder>
 </Solution>
