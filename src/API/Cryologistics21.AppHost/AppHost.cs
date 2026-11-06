@@ -24,7 +24,7 @@ IResourceBuilder<PostgresServerResource> usersPostgres = builder.AddPostgres("us
 
 IResourceBuilder<PostgresDatabaseResource> usersDb = usersPostgres.AddDatabase("users-db");
 
-builder.AddProject<Projects.Cryologistics21_Services_Users_Api>("users-api")
+IResourceBuilder<ProjectResource> usersApi = builder.AddProject<Projects.Cryologistics21_Services_Users_Api>("users-api")
 	.WithReference(redis)
 	.WithReference(kafka)
 	.WithReference(seq)
@@ -35,5 +35,10 @@ builder.AddProject<Projects.Cryologistics21_Services_Users_Api>("users-api")
 	.WaitFor(seq)
 	.WaitFor(keycloak)
 	.WaitFor(usersDb);
+
+builder.AddViteApp("frontend", "../../UI/cryologistics21")
+	.WithReference(usersApi)
+	.WaitFor(usersApi)
+	.WithEnvironment("NODE_ENV", "development");
 
 await builder.Build().RunAsync();
