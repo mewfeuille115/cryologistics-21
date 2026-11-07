@@ -21,6 +21,10 @@
 **/obj
 **/secrets.dev.yaml
 **/values.dev.yaml
+**/TestResults
+**/*.user
+UI/
+.files/
 LICENSE
 README.md
 !**/.gitignore
