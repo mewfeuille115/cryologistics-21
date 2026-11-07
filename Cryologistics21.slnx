@@ -24,6 +24,7 @@
     <Project Path="src/Services/Users/Cryologistics21.Services.Users.Presentation/Cryologistics21.Services.Users.Presentation.csproj" Id="ed1b6340-37c1-4540-8b40-3749af8c94b2" />
   </Folder>
   <Folder Name="/src/Services/Users/test/">
+    <Project Path="src/Services/Users/Cryologistics21.Services.Users.ArchitectureTests/Cryologistics21.Services.Users.ArchitectureTests.csproj" />
     <Project Path="src/Services/Users/Cryologistics21.Services.Users.UnitTests/Cryologistics21.Services.Users.UnitTests.csproj" Id="eeaa586c-8071-4fae-8f2c-39ffad9bfcb3" />
   </Folder>
   <Folder Name="/src/UI/">
@@ -32,4 +33,5 @@
       <Deploy />
     </Project>
   </Folder>
+  <Folder Name="/test/" />
 </Solution>
