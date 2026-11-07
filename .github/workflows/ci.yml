@@ -1,0 +1,112 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  # 1) Secretos
+  secrets-scan:
+    name: 1 · Secrets (detect-secrets)
+    uses: mewfeuille115/reusable-workflows/.github/workflows/secret-scan-yelp.yml@v1
+    permissions:
+      contents: read
+      security-events: write
+
+  # 2) SAST + SCA (en paralelo)
+  sast:
+    name: 2 · SAST (Snyk Code)
+    needs: secrets-scan
+    uses: mewfeuille115/reusable-workflows/.github/workflows/sast-scan-synk.yml@v1
+    permissions:
+      contents: read
+      security-events: write
+    secrets:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+  sca:
+    name: 2 · SCA (Snyk + NuGet Audit)
+    needs: secrets-scan
+    uses: mewfeuille115/reusable-workflows/.github/workflows/sca-scan-synk.yml@v1
+    permissions:
+      contents: read
+      security-events: write
+    with:
+      solution-path: Cryologistics21.slnx
+    secrets:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+  dependency-review:
+    name: 2 · Dependency review
+    if: github.event_name == 'pull_request'
+    uses: mewfeuille115/reusable-workflows/.github/workflows/dependency-review.yml@v1
+    permissions:
+      contents: read
+
+  # 3) Build + tests + cobertura + SonarCloud
+  build:
+    name: 3 · Build, tests and SonarCloud
+    needs: [sast, sca]
+    uses: mewfeuille115/reusable-workflows/.github/workflows/dotnet-build-sonar.yml@v1
+    permissions:
+      contents: read
+    with:
+      solution-path: Cryologistics21.slnx
+      sonar-project-key: mewfeuille115_cryologistics-21
+      sonar-organization: mewfeuille115
+      sonar-coverage-exclusions: '**/*AppHost*/**,**/*ServiceDefaults*/**,**/Migrations/**,**/Program.cs'
+      run-sonar: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    secrets:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  # 4) Docker build + Trivy (uno por microservicio)
+  container:
+    name: 4 · Docker + Trivy (${{ matrix.service }})
+    needs: build
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - service: users-api
+            dockerfile: src/Services/Users/Cryologistics21.Services.Users.Api/Dockerfile
+          # - service: <nuevo>-api
+          #   dockerfile: src/Services/<Nuevo>/Cryologistics21.Services.<Nuevo>.Api/Dockerfile
+    uses: mewfeuille115/reusable-workflows/.github/workflows/container-scan-trivy.yml@v1
+    permissions:
+      contents: read
+      security-events: write
+    with:
+      image-name: cryologistics21-${{ matrix.service }}
+      dockerfile: ${{ matrix.dockerfile }}
+      context: .
+
+  # Único check requerido en la protección de main
+  ci-gate:
+    name: CI gate
+    needs: [secrets-scan, sast, sca, dependency-review, build, container]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Evaluate results
+        run: |
+          echo "secrets-scan:      ${{ needs.secrets-scan.result }}"
+          echo "sast:              ${{ needs.sast.result }}"
+          echo "sca:               ${{ needs.sca.result }}"
+          echo "dependency-review: ${{ needs.dependency-review.result }}"
+          echo "build:             ${{ needs.build.result }}"
+          echo "container:         ${{ needs.container.result }}"
+          if [[ "${{ contains(needs.*.result, 'failure') }}" == "true" || "${{ contains(needs.*.result, 'cancelled') }}" == "true" ]]; then
+            echo "::error::At least one stage failed. Merge blocked."
+            exit 1
+          fi
+          echo "All stages passed (skipped stages are allowed)."
