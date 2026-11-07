@@ -1,5 +1,13 @@
 # CryoLogistics 21
 
+[![CI](https://github.com/mewfeuille115/cryologistics-21/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/mewfeuille115/cryologistics-21/actions/workflows/ci.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=mewfeuille115_cryologistics-21&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=mewfeuille115_cryologistics-21)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=mewfeuille115_cryologistics-21&metric=coverage)](https://sonarcloud.io/summary/new_code?id=mewfeuille115_cryologistics-21)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=mewfeuille115_cryologistics-21&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=mewfeuille115_cryologistics-21)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=mewfeuille115_cryologistics-21&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=mewfeuille115_cryologistics-21)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=mewfeuille115_cryologistics-21&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=mewfeuille115_cryologistics-21)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=mewfeuille115_cryologistics-21&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=mewfeuille115_cryologistics-21)
+
 Sistema de monitoreo de cadena de frío de grado industrial para el transporte de **terapias génicas** a **-70°C**. Una desviación térmica de más de **5 minutos** invalida el lote completo. El sistema cumple estrictamente con **FDA 21 CFR Part 11** — registros electrónicos auténticos, íntegros y no repudiables.
 
 > Portfolio project — Architecture Kata.
@@ -8,12 +16,13 @@ Sistema de monitoreo de cadena de frío de grado industrial para el transporte d
 
 ## Documentación
 
-| Documento                                                               | Descripción                                                     |
-| ----------------------------------------------------------------------- | --------------------------------------------------------------- |
-| [Arquitectura — C4 + Flujo de Datos](docs/architecture/architecture.md) | C4 Nivel 1, C4 Nivel 2, Flujo de telemetría y Firma Electrónica |
-| [Cumplimiento FDA 21 CFR Part 11](docs/compliance/cfr11-mapping.md)     | Audit Trail, Signing Challenge, 4-Eyes Principle                |
-| [Event Store — Schema](docs/schema/event-store.md)                      | DDL PostgreSQL, hash chaining, ejemplos de payload              |
-| [ADRs — Índice](docs/adr/README.md)                                     | Todas las decisiones de arquitectura                            |
+| Documento                                                               | Descripción                                                      |
+| ----------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| [Arquitectura — C4 + Flujo de Datos](docs/architecture/architecture.md) | C4 Nivel 1, C4 Nivel 2, Flujo de telemetría y Firma Electrónica  |
+| [Cumplimiento FDA 21 CFR Part 11](docs/compliance/cfr11-mapping.md)     | Audit Trail, Signing Challenge, 4-Eyes Principle                 |
+| [Event Store — Schema](docs/schema/event-store.md)                      | DDL PostgreSQL, hash chaining, ejemplos de payload               |
+| [ADRs — Índice](docs/adr/README.md)                                     | Todas las decisiones de arquitectura                             |
+| [CI / DevSecOps](docs/devsecops/ci-pipeline.md)                         | Pipeline de GitHub Actions, Quality Gates y protección de `main` |
 
 ---
 
@@ -77,15 +86,16 @@ Donde `ΔH` es la energía de activación del producto y `R` es la constante de 
 
 ### Stack Tecnológico
 
-| Capa                            | Tecnología                             | ADR    | Justificación                                                                                                             |
-| ------------------------------- | -------------------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------- |
-| **Runtime**                     | .NET 10 / C#                           | —      | LTS, Clean Architecture, handlers manuales sin librería de mediación.                                                     |
-| **Write Store (Event Store)**   | PostgreSQL                             | ADR-01 | Garantía ACID, implementación propia (sin Marten/EventStoreDB), inmutabilidad nativa.                                     |
-| **Read Store (Proyecciones)**   | Redis                                  | —      | Latencia ultrabaja (< 1ms). `HSET` para estado actual, `ZADD` para historial por ventana.                                 |
-| **Mensajería / Bus de Eventos** | Apache Kafka                           | ADR-02 | Replay nativo por offset (Backfilling FR-5), retención configurable, soporta 100k sensores (NFR-5).                       |
-| **Push al Frontend**            | SSE — Server-Sent Events               | ADR-03 | Canal unidireccional, suficiente para telemetría push. No requiere bidireccionalidad. Cumple NFR-3 (<200ms).              |
-| **Identidad y Autenticación**   | Keycloak                               | ADR-04 | Self-hosted, Docker-native, OAuth2/OIDC/SAML, sin dependencia de nube, sin costo.                                         |
-| **Observabilidad**              | OpenTelemetry + Aspire Dashboard (dev) | ADR-05 | OTel desacopla instrumentación del backend. Aspire Dashboard: zero-config, OTLP nativo, correlación trazas/logs/métricas. |
+| Capa                            | Tecnología                                 | ADR    | Justificación                                                                                                             |
+| ------------------------------- | ------------------------------------------ | ------ | ------------------------------------------------------------------------------------------------------------------------- |
+| **Runtime**                     | .NET 10 / C#                               | —      | LTS, Clean Architecture, handlers manuales sin librería de mediación.                                                     |
+| **Write Store (Event Store)**   | PostgreSQL                                 | ADR-01 | Garantía ACID, implementación propia (sin Marten/EventStoreDB), inmutabilidad nativa.                                     |
+| **Read Store (Proyecciones)**   | Redis                                      | —      | Latencia ultrabaja (< 1ms). `HSET` para estado actual, `ZADD` para historial por ventana.                                 |
+| **Mensajería / Bus de Eventos** | Apache Kafka                               | ADR-02 | Replay nativo por offset (Backfilling FR-5), retención configurable, soporta 100k sensores (NFR-5).                       |
+| **Push al Frontend**            | SSE — Server-Sent Events                   | ADR-03 | Canal unidireccional, suficiente para telemetría push. No requiere bidireccionalidad. Cumple NFR-3 (<200ms).              |
+| **Identidad y Autenticación**   | Keycloak                                   | ADR-04 | Self-hosted, Docker-native, OAuth2/OIDC/SAML, sin dependencia de nube, sin costo.                                         |
+| **Observabilidad**              | OpenTelemetry + Aspire Dashboard (dev)     | ADR-05 | OTel desacopla instrumentación del backend. Aspire Dashboard: zero-config, OTLP nativo, correlación trazas/logs/métricas. |
+| **CI / DevSecOps**              | GitHub Actions + SonarCloud + Snyk + Trivy | ADR-11 | Status checks públicos en cada PR; análisis de calidad y seguridad automatizado. Solo CI, sin CD (evita costos cloud).    |
 
 ---
 
@@ -98,7 +108,38 @@ Donde `ΔH` es la energía de activación del producto y `R` es la constante de 
 
 ---
 
-## 5. Referencias y Normativas
+## 5. Pipeline de CI / DevSecOps
+
+Cada cambio entra a `main` mediante Pull Request y debe pasar el check **`CI gate`**, que agrega las etapas del pipeline de GitHub Actions. Los workflows son reutilizables y viven en [`reusable-workflows`](https://github.com/mewfeuille115/reusable-workflows).
+
+```mermaid
+flowchart LR
+    A[Pull Request] --> B[1 · Secretos<br/>detect-secrets]
+    B --> C[2 · SAST<br/>Snyk Code]
+    B --> D[2 · SCA<br/>Snyk + NuGet Audit]
+    A --> E[2 · Dependency Review]
+    C --> F[3 · Build + Tests<br/>SonarCloud]
+    D --> F
+    F --> G[4 · Docker + Trivy<br/>por microservicio]
+    E --> H{{CI gate}}
+    G --> H
+```
+
+**Quality Gates de SonarCloud** (sobre código nuevo):
+
+| Métrica                | Umbral |
+| ---------------------- | ------ |
+| Cobertura              | > 80 % |
+| Security Rating        | A      |
+| Reliability Rating     | A      |
+| Maintainability Rating | A      |
+| Líneas duplicadas      | < 3 %  |
+
+> Detalle completo (etapas, secrets, cómo añadir un microservicio): [docs/devsecops/ci-pipeline.md](docs/devsecops/ci-pipeline.md)
+
+---
+
+## 6. Referencias y Normativas
 
 | Documento                                                                                                                     | Descripción                                                         |
 | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
