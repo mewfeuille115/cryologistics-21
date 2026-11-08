@@ -1,12 +1,9 @@
 import { defineConfig } from 'vite';
 import plugin from '@vitejs/plugin-react';
 
-const apiTarget = process.env.USERS_API_HTTPS || process.env.USERS_API_HTTP;
-
-console.log(
-  'API environment variables:',
-  Object.keys(process.env).filter(key => key.includes('API'))
-);
+const apiTarget =
+  process.env.GATEWAY_HTTPS ||
+  process.env.GATEWAY_HTTP;
 
 if (!apiTarget) {
   throw new Error('API endpoint is not configured.');

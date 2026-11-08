@@ -59,9 +59,20 @@ IResourceBuilder<ProjectResource> usersApi = builder.AddProject<Projects.Cryolog
 	.WaitFor(keycloak)
 	.WaitFor(usersDb);
 
-builder.AddViteApp("frontend", "../../UI/cryologistics21")
+IResourceBuilder<ProjectResource> gateway = builder.AddProject<Projects.Cryologistics21_Gateway>("gateway")
+	.WithExternalHttpEndpoints()
+	.WithEnvironment("Keycloak__ClientSecret", apiClientSecret)
+	.WithReference(seq)
+	.WithReference(keycloak)
 	.WithReference(usersApi)
-	.WaitFor(usersApi)
+	.WaitFor(seq)
+	.WaitFor(keycloak)
+	.WaitFor(usersApi);
+
+builder.AddViteApp("frontend", "../../UI/cryologistics21")
+	.WithExternalHttpEndpoints()
+	.WithReference(gateway)
+	.WaitFor(gateway)
 	.WithEnvironment("NODE_ENV", "development");
 
 await builder.Build().RunAsync();
