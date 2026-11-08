@@ -70,6 +70,7 @@ IResourceBuilder<ProjectResource> gateway = builder.AddProject<Projects.Cryologi
 	.WaitFor(usersApi);
 
 builder.AddViteApp("frontend", "../../UI/cryologistics21")
+	.WithNpm(installCommand: "ci", installArgs: ["--include=dev"])
 	.WithExternalHttpEndpoints()
 	.WithReference(gateway)
 	.WaitFor(gateway)
