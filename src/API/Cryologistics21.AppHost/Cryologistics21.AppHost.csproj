@@ -13,10 +13,12 @@
     <PackageReference Include="Aspire.Hosting.PostgreSQL" />
     <PackageReference Include="Aspire.Hosting.Redis" />
     <PackageReference Include="Aspire.Hosting.Seq" />
+    <PackageReference Include="DotNetEnv" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Services\Users\Cryologistics21.Services.Users.Api\Cryologistics21.Services.Users.Api.csproj" />
+    <ProjectReference Include="..\Cryologistics21.Gateway\Cryologistics21.Gateway.csproj" />
   </ItemGroup>
 
   <ItemGroup>

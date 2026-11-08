@@ -7,6 +7,7 @@
   <Folder Name="/src/" />
   <Folder Name="/src/API/">
     <Project Path="src/API/Cryologistics21.AppHost/Cryologistics21.AppHost.csproj" Id="3d322a92-fb7a-4680-a4cd-94b3d9575647" />
+    <Project Path="src/API/Cryologistics21.Gateway/Cryologistics21.Gateway.csproj" />
   </Folder>
   <Folder Name="/src/Common/">
     <Project Path="src/Common/Cryologistics21.Common.Application/Cryologistics21.Common.Application.csproj" Id="7fa791c8-80dd-417d-875d-abf7c73b98cf" />
@@ -33,5 +34,8 @@
       <Deploy />
     </Project>
   </Folder>
-  <Folder Name="/test/" />
+  <Folder Name="/test/">
+    <Project Path="test/Cryologistics21.Gateway.IntegrationTests/Cryologistics21.Gateway.IntegrationTests.csproj" Id="4dfcb505-1d00-4dde-a5e1-33a10c9e0b92" />
+    <Project Path="test/Cryologistics21.Gateway.UnitTests/Cryologistics21.Gateway.UnitTests.csproj" Id="2a65cc1b-d36e-4051-959a-fbd62ec6c081" />
+  </Folder>
 </Solution>

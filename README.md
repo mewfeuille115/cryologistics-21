@@ -26,6 +26,26 @@ Sistema de monitoreo de cadena de frío de grado industrial para el transporte d
 
 ---
 
+## Configuración local (`.env`)
+
+Copia `.env.example` a `.env` en la raíz del repositorio y reemplaza cada valor `change-me` por un secreto aleatorio:
+
+```powershell
+Copy-Item .env.example .env
+[Convert]::ToHexString([System.Security.Cryptography.RandomNumberGenerator]::GetBytes(24))
+```
+
+En Linux, puedes copiar la plantilla y generar un valor equivalente con OpenSSL:
+
+```bash
+cp .env.example .env
+openssl rand -hex 24
+```
+
+Cada comando genera 24 bytes aleatorios, representados como 48 caracteres hexadecimales. Genera un valor independiente para cada secreto de `.env` y no compartas ni subas ese archivo al repositorio; `.env` está excluido de Git.
+
+---
+
 ## 1. El Desafío
 
 Un laboratorio farmacéutico global requiere monitoreo de grado industrial para el transporte de terapias génicas de alto valor. Una excursión térmica de más de 5 minutos invalida el lote completo, con pérdidas millonarias y riesgo de salud pública. El sistema garantiza trazabilidad completa, firma electrónica con no repudio y detección de excursiones en < 10 segundos.
