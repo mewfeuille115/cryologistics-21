@@ -34,5 +34,8 @@
       <Deploy />
     </Project>
   </Folder>
-  <Folder Name="/test/" />
+  <Folder Name="/test/">
+    <Project Path="test/Cryologistics21.Gateway.IntegrationTests/Cryologistics21.Gateway.IntegrationTests.csproj" Id="4dfcb505-1d00-4dde-a5e1-33a10c9e0b92" />
+    <Project Path="test/Cryologistics21.Gateway.UnitTests/Cryologistics21.Gateway.UnitTests.csproj" Id="2a65cc1b-d36e-4051-959a-fbd62ec6c081" />
+  </Folder>
 </Solution>

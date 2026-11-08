@@ -21,4 +21,9 @@
     <PackageReference Include="Yarp.ReverseProxy" />
   </ItemGroup>
 
+<ItemGroup>
+	<InternalsVisibleTo Include="Cryologistics21.Gateway.UnitTests" />
+	<InternalsVisibleTo Include="Cryologistics21.Gateway.IntegrationTests" />
+</ItemGroup>
+
 </Project>

@@ -5,13 +5,12 @@ namespace Cryologistics21.Gateway.Middleware;
 
 internal sealed class LogContextTraceLoggingMiddleware(RequestDelegate next)
 {
-	public Task Invoke(HttpContext context)
+	public async Task InvokeAsync(HttpContext context)
 	{
-		string traceId = Activity.Current?.TraceId.ToString();
-
+		string? traceId = Activity.Current?.TraceId.ToString();
 		using (LogContext.PushProperty("TraceId", traceId))
 		{
-			return next.Invoke(context);
+			await next.Invoke(context);
 		}
 	}
 }
