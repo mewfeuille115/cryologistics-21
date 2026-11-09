@@ -57,7 +57,7 @@ jobs:
   build:
     name: 3 · Build, tests and SonarCloud
     needs: [sast, sca]
-    uses: mewfeuille115/reusable-workflows/.github/workflows/dotnet-build-sonar.yml@v1
+    uses: mewfeuille115/reusable-workflows/.github/workflows/dotnet-build-sonar.yml@v1.1
     permissions:
       contents: read
     with:
@@ -66,6 +66,7 @@ jobs:
       sonar-organization: mewfeuille115
       sonar-coverage-exclusions: '**/*AppHost*/**,**/*ServiceDefaults*/**,**/Migrations/**,**/Program.cs'
       run-sonar: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+      generated-secrets: CRYOLOGISTICS21_API_CLIENT_SECRET,CRYOLOGISTICS21_ADMIN_CLIENT_SECRET,DEMO_ADMIN_PASSWORD,DEMO_OPERATOR_PASSWORD,DEMO_QA_PASSWORD
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
