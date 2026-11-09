@@ -7,4 +7,5 @@ internal sealed class KeyCloakOptions
 	public string ConfidentialClientId { get; set; }
 	public string ConfidentialClientSecret { get; set; }
 	public string PublicClientId { get; set; }
+	public string PublicClientSecret { get; set; }
 }
