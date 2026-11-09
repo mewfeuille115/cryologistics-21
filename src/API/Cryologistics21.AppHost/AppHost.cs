@@ -46,6 +46,7 @@ IResourceBuilder<PostgresServerResource> usersPostgres = builder.AddPostgres("us
 IResourceBuilder<PostgresDatabaseResource> usersDb = usersPostgres.AddDatabase("users-db");
 
 IResourceBuilder<ProjectResource> usersApi = builder.AddProject<Projects.Cryologistics21_Services_Users_Api>("users-api")
+	.WithHttpsEndpoint()
 	.WithEnvironment("KeyCloak__PublicClientSecret", apiClientSecret)
 	.WithEnvironment("KeyCloak__ConfidentialClientSecret", adminClientSecret)
 	.WithReference(redis)
@@ -70,10 +71,12 @@ IResourceBuilder<ProjectResource> gateway = builder.AddProject<Projects.Cryologi
 
 builder.AddViteApp("frontend", "../../UI/cryologistics21")
 	.WithNpm(installCommand: "ci", installArgs: ["--include=dev"])
+	.WithEnvironment("NODE_ENV", "development")
 	.WithExternalHttpEndpoints()
 	.WithReference(gateway)
+	.WithEnvironment("GATEWAY_HTTPS", gateway.GetEndpoint("https"))
 	.WaitFor(gateway)
-	.WithEnvironment("NODE_ENV", "development");
+	.WithExternalHttpEndpoints();
 
 await builder.Build().RunAsync();
 

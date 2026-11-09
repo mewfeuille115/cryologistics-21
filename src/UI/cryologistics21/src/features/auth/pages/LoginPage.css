@@ -1,0 +1,493 @@
+.app-header {
+  position: sticky;
+  z-index: 2;
+  top: 0;
+  display: flex;
+  height: 56px;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  padding: 0 max(24px, calc((100vw - 1280px) / 2));
+  background: color-mix(in srgb, var(--background) 92%, transparent);
+  backdrop-filter: blur(12px);
+}
+
+.brand,
+.header-tools,
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+}
+
+.brand {
+  gap: 10px;
+  color: var(--foreground);
+  text-decoration: none;
+}
+
+.brand-mark {
+  width: 30px;
+  height: 30px;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--primary);
+  background: var(--card);
+}
+
+.brand-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.brand-standard {
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 2px 6px;
+  color: var(--muted-foreground);
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+
+.header-tools {
+  gap: 14px;
+}
+
+.utc-clock {
+  color: var(--muted-foreground);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.icon-button,
+.password-toggle {
+  display: inline-grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted-foreground);
+  cursor: pointer;
+}
+
+.icon-button:hover,
+.password-toggle:hover {
+  color: var(--foreground);
+  background: var(--muted);
+}
+
+.login-layout {
+  display: grid;
+  width: min(100% - 48px, 1280px);
+  min-height: calc(100vh - 56px);
+  grid-template-columns: minmax(360px, 0.9fr) minmax(0, 1.35fr);
+  align-items: center;
+  gap: clamp(40px, 8vw, 112px);
+  margin: 0 auto;
+  padding: 64px 0;
+}
+
+.telemetry-section {
+  display: grid;
+  gap: 28px;
+  animation: arrive 500ms ease-out both;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: var(--primary);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+}
+
+.intro-copy h1 {
+  max-width: 650px;
+  margin: 0;
+  color: var(--foreground);
+  font-size: clamp(26px, 3vw, 36px);
+  font-weight: 600;
+  line-height: 1.18;
+}
+
+.intro-description {
+  max-width: 540px;
+  margin: 14px 0 0;
+  color: var(--muted-foreground);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.telemetry-panel,
+.auth-panel {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+}
+
+.telemetry-panel {
+  padding: 22px;
+}
+
+.panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--muted-foreground);
+  font-size: 12px;
+}
+
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid rgb(52 211 153 / 25%);
+  border-radius: 999px;
+  padding: 3px 9px;
+  color: var(--success);
+  background: rgb(52 211 153 / 8%);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.status-chip>span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 8px rgb(52 211 153 / 60%);
+}
+
+.temperature-value {
+  margin: 14px 0 20px;
+  color: var(--foreground);
+  font-family: var(--font-mono);
+  font-size: 48px;
+  font-weight: 500;
+  line-height: 1.15;
+}
+
+.temperature-value span {
+  margin-left: 5px;
+  color: var(--muted-foreground);
+  font-size: 20px;
+}
+
+.telemetry-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.metric {
+  display: grid;
+  min-width: 0;
+  gap: 7px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px;
+  background: var(--card-subtle);
+}
+
+.metric>span {
+  color: var(--muted-foreground);
+  font-size: 10px;
+}
+
+.metric strong {
+  overflow-wrap: anywhere;
+  color: var(--foreground);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.metric .metric-alert {
+  color: var(--danger);
+}
+
+.sample-note {
+  margin: 14px 0 0;
+  color: var(--muted-foreground);
+  font-size: 10px;
+}
+
+.auth-section {
+  width: 100%;
+  max-width: 440px;
+  justify-self: start;
+  animation: arrive 500ms 100ms ease-out both;
+}
+
+.auth-panel {
+  padding: 26px;
+}
+
+.auth-heading h2 {
+  margin: 0;
+  color: var(--foreground);
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.auth-heading>p:last-child {
+  margin: 6px 0 0;
+  color: var(--muted-foreground);
+  font-size: 12px;
+}
+
+.login-form {
+  display: grid;
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.form-field {
+  display: grid;
+  gap: 7px;
+  color: var(--foreground);
+}
+
+.field-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.field-label>span {
+  color: var(--danger);
+}
+
+.form-field input {
+  width: 100%;
+  height: 40px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0 12px;
+  background: var(--input);
+  color: var(--foreground);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.form-field input::placeholder {
+  color: var(--muted-foreground);
+  opacity: 0.7;
+}
+
+.form-field input:focus {
+  border-color: var(--primary);
+  outline: 1px solid var(--primary);
+}
+
+.form-field input:disabled {
+  opacity: 0.65;
+}
+
+.password-control {
+  position: relative;
+}
+
+.password-control input {
+  padding-right: 44px;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 36px;
+  height: 36px;
+}
+
+.submit-button {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 0;
+  border-radius: 6px;
+  margin-top: 2px;
+  padding: 0 14px;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 140ms ease;
+}
+
+.submit-button:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--primary) 84%, white);
+}
+
+.submit-button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.submit-button:disabled .material-symbols {
+  animation: rotate 1s linear infinite;
+}
+
+.form-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  border: 1px solid;
+  border-radius: 6px;
+  margin: 0;
+  padding: 10px 12px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.form-message-error {
+  border-color: rgb(251 113 133 / 30%);
+  background: rgb(251 113 133 / 8%);
+  color: var(--danger);
+}
+
+.form-message-success {
+  margin-top: 22px;
+  border-color: rgb(52 211 153 / 30%);
+  background: rgb(52 211 153 / 8%);
+  color: var(--success);
+}
+
+.compliance-notice {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin-top: 22px;
+  padding: 12px;
+  background: var(--card-subtle);
+}
+
+.compliance-notice strong {
+  color: var(--foreground);
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.compliance-notice p,
+.access-help {
+  color: var(--muted-foreground);
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.compliance-notice p {
+  margin: 5px 0 0;
+}
+
+.access-help {
+  margin: 13px 0 0;
+  text-align: center;
+}
+
+@keyframes arrive {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 900px) {
+  .login-layout {
+    width: min(100% - 40px, 580px);
+    min-height: auto;
+    grid-template-columns: 1fr;
+    gap: 38px;
+    padding: 44px 0;
+  }
+
+  .auth-section {
+    max-width: none;
+    justify-self: stretch;
+  }
+}
+
+@media (max-width: 540px) {
+  .app-header {
+    padding: 0 16px;
+  }
+
+  .brand {
+    gap: 7px;
+  }
+
+  .brand-name {
+    font-size: 12px;
+  }
+
+  .header-tools {
+    gap: 5px;
+  }
+
+  .utc-clock {
+    font-size: 10px;
+  }
+
+  .login-layout {
+    width: calc(100% - 32px);
+    gap: 30px;
+    padding: 32px 0;
+  }
+
+  .intro-copy h1 {
+    font-size: 27px;
+  }
+
+  .telemetry-panel,
+  .auth-panel {
+    padding: 18px;
+  }
+
+  .temperature-value {
+    font-size: 42px;
+  }
+
+  .telemetry-metrics {
+    gap: 7px;
+  }
+
+  .metric {
+    padding: 9px 7px;
+  }
+
+  .metric>span {
+    min-height: 26px;
+    font-size: 9px;
+  }
+
+  .metric strong {
+    font-size: 11px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
