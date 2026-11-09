@@ -1,22 +1,24 @@
-﻿using Cryologistics21.Services.Users.Infrastructure.Database;
+using Cryologistics21.Services.Users.Infrastructure;
+using Cryologistics21.Services.Users.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cryologistics21.Services.Users.Api.Extensions;
 
 internal static class MigrationExtensions
 {
-	internal static void ApplyMigrations(this IApplicationBuilder app)
+	internal static async Task ApplyMigrationsAsync(this IApplicationBuilder app)
 	{
 		using IServiceScope scope = app.ApplicationServices.CreateScope();
 
-		ApplyMigration<UsersDbContext>(scope);
+		await ApplyMigrationAsync<UsersDbContext>(scope);
+		await scope.ServiceProvider.GetRequiredService<IRealmUserSeeder>().SeedAsync();
 	}
 
-	private static void ApplyMigration<TDbContext>(IServiceScope scope)
+	private static async Task ApplyMigrationAsync<TDbContext>(IServiceScope scope)
 		where TDbContext : DbContext
 	{
-		using TDbContext context = scope.ServiceProvider.GetRequiredService<TDbContext>();
+		TDbContext context = scope.ServiceProvider.GetRequiredService<TDbContext>();
 
-		context.Database.Migrate();
+		await context.Database.MigrateAsync();
 	}
 }

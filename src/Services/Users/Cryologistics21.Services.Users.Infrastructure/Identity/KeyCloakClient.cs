@@ -19,6 +19,33 @@ internal sealed partial class KeyCloakClient(HttpClient httpClient, IOptions<Key
 		return ExtractIdentityIdFromLocationHeader(httpResponseMessage);
 	}
 
+	internal async Task<IReadOnlyCollection<KeyCloakRealmUser>> GetUsersAsync(CancellationToken cancellationToken = default)
+	{
+		const int pageSize = 100;
+		var users = new List<KeyCloakRealmUser>();
+		bool hasMorePages = true;
+
+		int first = 0;
+		while (hasMorePages)
+		{
+			List<KeyCloakRealmUser>? page = await httpClient.GetFromJsonAsync<List<KeyCloakRealmUser>>(
+				$"users?first={first}&max={pageSize}",
+				cancellationToken);
+
+			if (page is null || page.Count == 0)
+			{
+				hasMorePages = false;
+				continue;
+			}
+
+			users.AddRange(page);
+			hasMorePages = page.Count == pageSize;
+			first += pageSize;
+		}
+
+		return users;
+	}
+
 	private static string ExtractIdentityIdFromLocationHeader(HttpResponseMessage httpResponseMessage)
 	{
 		const string usersSegmentName = "users/";
