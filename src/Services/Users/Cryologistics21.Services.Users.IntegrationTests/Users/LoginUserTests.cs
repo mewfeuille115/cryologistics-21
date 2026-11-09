@@ -4,15 +4,21 @@ using Cryologistics21.Common.Domain;
 using Cryologistics21.Services.Users.Application.Users.LoginUser;
 using Cryologistics21.Services.Users.Application.Users.RegisterUser;
 using Cryologistics21.Services.Users.Domain.Users;
+using Cryologistics21.Services.Users.Infrastructure;
 using Cryologistics21.Services.Users.IntegrationTests.Abstractions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Cryologistics21.Services.Users.IntegrationTests.Users;
 
 public class LoginUserTests : BaseIntegrationTest
 {
+	private readonly IntegrationTestWebAppFactory _factory;
+
 	public LoginUserTests(IntegrationTestWebAppFactory factory)
 		: base(factory)
 	{
+		_factory = factory;
 	}
 
 	public static TheoryData<string, string> InvalidCommands()
@@ -92,5 +98,30 @@ public class LoginUserTests : BaseIntegrationTest
 		// Assert
 		result.IsFailure.Should().BeTrue();
 		result.Error.Should().Be(UserErrors.InvalidEmailOrPassword(email.ToString()));
+	}
+
+	[Fact]
+	public async Task Should_SeedRealmUsersOnStartup_AndRemainIdempotentAsync()
+	{
+		string[] realmUserEmails =
+		[
+			"admin@cryologistics21.com",
+			"operator@cryologistics21.com",
+			"qa@cryologistics21.com"
+		];
+
+		List<User> users = await DbContext.Set<User>()
+			.Where(user => realmUserEmails.Contains(user.Email))
+			.ToListAsync(TestContext.Current.CancellationToken);
+
+		users.Should().HaveCount(3);
+		users.Should().OnlyContain(user => !string.IsNullOrWhiteSpace(user.IdentityId));
+
+		using IServiceScope scope = _factory.Services.CreateScope();
+		IRealmUserSeeder seeder = scope.ServiceProvider.GetRequiredService<IRealmUserSeeder>();
+
+		int seededCount = await seeder.SeedAsync(TestContext.Current.CancellationToken);
+
+		seededCount.Should().Be(0);
 	}
 }
