@@ -15,11 +15,11 @@ internal sealed class RealmUserSeeder(
 	{
 		IReadOnlyCollection<KeyCloakRealmUser> realmUsers = await keyCloakClient.GetUsersAsync(cancellationToken);
 		KeyCloakRealmUser[] usersToSeed = [.. realmUsers.Where(user =>
-	  user.Enabled
-	  && !string.IsNullOrWhiteSpace(user.Id)
-	  && !string.IsNullOrWhiteSpace(user.Email)
-	  && !string.IsNullOrWhiteSpace(user.FirstName)
-	  && !string.IsNullOrWhiteSpace(user.LastName))];
+			user.Enabled
+			&& !string.IsNullOrWhiteSpace(user.Id)
+			&& !string.IsNullOrWhiteSpace(user.Email)
+			&& !string.IsNullOrWhiteSpace(user.FirstName)
+			&& !string.IsNullOrWhiteSpace(user.LastName))];
 
 		if (usersToSeed.Length == 0)
 		{
@@ -46,10 +46,10 @@ internal sealed class RealmUserSeeder(
 			}
 
 			var user = User.Create(
-			  realmUser.Email!,
-			  realmUser.FirstName!,
-			  realmUser.LastName!,
-			  realmUser.Id!);
+				realmUser.Email!,
+				realmUser.FirstName!,
+				realmUser.LastName!,
+				realmUser.Id!);
 
 			foreach (Role role in user.Roles)
 			{
