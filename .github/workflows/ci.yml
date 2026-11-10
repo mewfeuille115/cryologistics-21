@@ -57,16 +57,19 @@ jobs:
   build:
     name: 3 · Build, tests and SonarCloud
     needs: [sast, sca]
-    uses: mewfeuille115/reusable-workflows/.github/workflows/dotnet-build-sonar.yml@v1.1
+    uses: mewfeuille115/reusable-workflows/.github/workflows/dotnet-build-sonar.yml@v1.2
     permissions:
       contents: read
     with:
       solution-path: Cryologistics21.slnx
       sonar-project-key: mewfeuille115_cryologistics-21
       sonar-organization: mewfeuille115
-      sonar-coverage-exclusions: '**/*AppHost*/**,**/*ServiceDefaults*/**,**/Migrations/**,**/Program.cs'
+      sonar-coverage-exclusions: '**/*AppHost*/**,**/*ServiceDefaults*/**,**/Migrations/**,**/Program.cs,src/UI/**/*.test.*,src/UI/**/*.spec.*,src/UI/**/*.d.ts,src/UI/**/main.tsx,src/UI/**/vite.config.*'
       run-sonar: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
       generated-secrets: CRYOLOGISTICS21_API_CLIENT_SECRET,CRYOLOGISTICS21_ADMIN_CLIENT_SECRET,DEMO_ADMIN_PASSWORD,DEMO_OPERATOR_PASSWORD,DEMO_QA_PASSWORD
+      frontend-working-directory: src/UI/cryologistics21
+      frontend-test-command: npm ci && npm run test:coverage
+      frontend-lcov-path: src/UI/cryologistics21/coverage/lcov.info
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 

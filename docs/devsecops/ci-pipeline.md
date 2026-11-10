@@ -35,7 +35,7 @@ flowchart LR
 | 2. SAST | Snyk Code | `sast-scan-synk.yml` | Hallazgos de severidad ≥ High |
 | 2. SCA | Snyk + `dotnet list package --vulnerable` | `sca-scan-synk.yml` | Dependencias vulnerables ≥ High |
 | 2. Dependency review | `dependency-review-action` | `dependency-review.yml` | El PR añade dependencias vulnerables |
-| 3. Build y calidad | .NET + dotnet-coverage + SonarCloud | `dotnet-build-sonar.yml` | Falla compilación, tests o el Quality Gate |
+| 3. Build y calidad | .NET + dotnet-coverage + tests del frontend (opcional) + SonarCloud | `dotnet-build-sonar.yml` | Falla compilación, tests (.NET o frontend) o el Quality Gate |
 | 4. Contenedores | Docker + Trivy | `container-scan-trivy.yml` | CVE High/Critical con parche disponible |
 
 Los resultados de seguridad se publican como SARIF en **Security → Code scanning**. El job `CI gate` agrega todo y es el único check requerido.
@@ -53,6 +53,22 @@ Evaluados sobre **código nuevo**. El pipeline espera el resultado del gate (`so
 | Líneas duplicadas | < 3 % |
 
 Los umbrales se configuran en SonarCloud (gate "Sonar way"), no en el YAML. La cobertura excluye AppHost, ServiceDefaults, migraciones y `Program.cs`.
+
+## Cobertura del frontend
+
+`dotnet-sonarscanner` también analiza los archivos JS/TS del repositorio. Si solo se reporta la cobertura de .NET, todo el código nuevo de `UI/` cuenta con 0 % y arrastra el Quality Gate. Por eso la etapa 3 admite pasos opcionales para el frontend, que solo se ejecutan si se informa `frontend-working-directory`:
+
+| Input | Uso |
+| --- | --- |
+| `frontend-working-directory` | Directorio con `package.json` y `package-lock.json` (activa los pasos del frontend) |
+| `frontend-test-command` | Comando que genera la cobertura (por defecto `npm ci && npm run test:coverage`) |
+| `frontend-lcov-path` | Ruta del `lcov.info`, relativa a la raíz del repo |
+| `frontend-node-version` | Versión de Node.js (por defecto `22`) |
+
+- Las rutas `SF:` del `lcov.info` se normalizan para que Sonar las resuelva desde la raíz del repo.
+- El comando de tests se pasa por variable de entorno, no interpolado en el shell.
+- Los tests y archivos de configuración del frontend se excluyen de la cobertura vía `sonar-coverage-exclusions` en `ci.yml`.
+- La cobertura solo se reporta: la lógica real del frontend necesita tests propios para superar el umbral de > 80 %.
 
 ## Protección de `main`
 
@@ -90,5 +106,5 @@ Ruleset activo sobre `main`:
 ## Limitaciones conocidas
 
 - Los PRs desde forks no tienen acceso a secrets: el análisis de Sonar se omite y SAST/SCA fallan.
-- El frontend (`UI/`) aún no tiene un job de build/lint/test propio.
+- El frontend (`UI/`) aún no tiene un job de build/lint propio; solo sus tests con cobertura corren dentro de la etapa 3.
 - Sin CD: no se publican imágenes a ningún registro.
