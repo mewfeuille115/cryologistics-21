@@ -1,6 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\Cryologistics21.Common.Infrastructure\Cryologistics21.Common.Infrastructure.csproj" />
     <ProjectReference Include="..\Cryologistics21.Services.Users.Presentation\Cryologistics21.Services.Users.Presentation.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Cryologistics21.Services.Users.IntegrationTests" />
+  </ItemGroup>
+
 </Project>

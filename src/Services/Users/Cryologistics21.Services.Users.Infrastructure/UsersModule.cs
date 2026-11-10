@@ -1,4 +1,4 @@
-﻿using Cryologistics21.Common.Application.Authorization;
+using Cryologistics21.Common.Application.Authorization;
 using Cryologistics21.Common.Application.EventBus;
 using Cryologistics21.Common.Application.Messaging;
 using Cryologistics21.Common.Infrastructure.Outbox;
@@ -46,7 +46,7 @@ public static class UsersModule
 	{
 		services.AddScoped<IPermissionService, PermissionService>();
 
-		services.Configure<KeyCloakOptions>(configuration.GetSection("Users:KeyCloak"));
+		services.Configure<KeyCloakOptions>(configuration.GetSection("KeyCloak"));
 
 		services.AddTransient<KeyCloakAuthDelegatingHandler>();
 
@@ -61,6 +61,7 @@ public static class UsersModule
 			.AddHttpMessageHandler<KeyCloakAuthDelegatingHandler>();
 
 		services.AddTransient<IIdentityProviderService, IdentityProviderService>();
+		services.AddScoped<IRealmUserSeeder, RealmUserSeeder>();
 
 		services.AddDbContext<UsersDbContext>((sp, options) =>
 			options

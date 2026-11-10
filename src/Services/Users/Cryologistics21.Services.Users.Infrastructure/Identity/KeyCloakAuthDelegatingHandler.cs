@@ -1,4 +1,4 @@
-﻿using System.Net.Http.Headers;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Options;
@@ -13,9 +13,12 @@ internal sealed class KeyCloakAuthDelegatingHandler(IOptions<KeyCloakOptions> op
 		HttpRequestMessage request,
 		CancellationToken cancellationToken)
 	{
-		AuthToken authorizationToken = await GetAuthorizationTokenAsync(cancellationToken);
+		if (request.RequestUri != new Uri(_options.TokenUrl))
+		{
+			AuthToken authorizationToken = await GetAuthorizationTokenAsync(cancellationToken);
 
-		request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authorizationToken.AccessToken);
+			request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authorizationToken.AccessToken);
+		}
 
 		HttpResponseMessage httpResponseMessage = await base.SendAsync(request, cancellationToken);
 
