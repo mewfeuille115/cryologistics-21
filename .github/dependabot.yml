@@ -1,0 +1,114 @@
+# Dependabot — automated dependency version updates.
+#
+# Complements the CI/DevSecOps pipeline (ADR-11): this file opens the update
+# pull requests, while `ci.yml` is the one that verifies the updated
+# dependencies still build and do not introduce vulnerabilities.
+#
+# Dependabot proposes the change, CI validates it: its pull requests go
+# through the same required `CI gate` check as any other contribution.
+#
+# Documentation:
+#   https://docs.github.com/en/code-security/dependabot/working-with-dependabot/dependabot-options-reference
+
+version: 2
+
+updates:
+  # .NET — solution lives at the repository root.
+  # The solution file is auto-discovered; `solution` is not part of the
+  # dependabot.yml schema, so it must not be set here.
+  - package-ecosystem: nuget
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: UTC
+    open-pull-requests-limit: 5
+    groups:
+      # Group by vendor so a single PR covers a whole provider.
+      dotnet-runtime:
+        patterns:
+          - "Microsoft.*"
+          - "System.*"
+      aspire:
+        patterns:
+          - "Aspire.*"
+      testing:
+        patterns:
+          - "xunit*"
+          - "Microsoft.NET.Test.Sdk"
+          - "AwesomeAssertions"
+          - "Bogus"
+          - "coverlet.*"
+        update-types:
+          - minor
+          - patch
+    commit-message:
+      prefix: "chore(deps)"
+    labels:
+      - dependencies
+      - dotnet
+
+  # Frontend — React/Vite project under src/UI/cryologistics21.
+  - package-ecosystem: npm
+    directory: "/src/UI/cryologistics21"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: UTC
+    open-pull-requests-limit: 5
+    groups:
+      frontend-deps:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+    commit-message:
+      prefix: "chore(deps)"
+    labels:
+      - dependencies
+      - frontend
+
+  # GitHub Actions workflows.
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: UTC
+    commit-message:
+      prefix: "chore(deps)"
+    labels:
+      - dependencies
+      - ci
+
+  # Docker base images of the microservices.
+  - package-ecosystem: docker
+    directory: "/src/Services/Users/Cryologistics21.Services.Users.Api"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: UTC
+    commit-message:
+      prefix: "chore(deps)"
+    labels:
+      - dependencies
+      - docker
+
+  - package-ecosystem: docker
+    directory: "/src/API/Cryologistics21.Gateway"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: UTC
+    commit-message:
+      prefix: "chore(deps)"
+    labels:
+      - dependencies
+      - docker
+
