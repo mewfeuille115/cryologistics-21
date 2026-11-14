@@ -1,15 +1,20 @@
-# Dependabot — actualizaciones automáticas de dependencias.
+# Dependabot — automated dependency version updates.
 #
-# Complementa al pipeline de CI/DevSecOps (ADR-11): este archivo abre PRs de
-# actualización, mientras que `ci.yml` verifica que las dependencias
-# actualizadas siguen compilando y no introducen vulnerabilidades.
+# Complements the CI/DevSecOps pipeline (ADR-11): this file opens the update
+# pull requests, while `ci.yml` is the one that verifies the updated
+# dependencies still build and do not introduce vulnerabilities.
 #
-# Referencia: https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options
+# Dependabot proposes the change, CI validates it: its pull requests go
+# through the same required `CI gate` check as any other contribution.
+#
+# Documentation:
+#   https://docs.github.com/en/code-security/concepts/supply-chain-security/dependabot-version-updates
+#   https://docs.github.com/en/code-security/dependabot/working-with-dependabot/dependabot-options-reference
 
 version: 2
 
 updates:
-  # .NET — solución en la raíz del repositorio.
+  # .NET — solution lives at the repository root.
   - package-ecosystem: nuget
     directory: "/"
     solution: "Cryologistics21.slnx"
@@ -20,7 +25,7 @@ updates:
       timezone: America/Mexico_City
     open-pull-requests-limit: 5
     groups:
-      # Agrupar por proveedor para no abrir un PR por paquete.
+      # Group by vendor so a single PR covers a whole provider.
       dotnet-runtime:
         patterns:
           - "Microsoft.*"
@@ -44,7 +49,7 @@ updates:
       - dependencies
       - dotnet
 
-  # Frontend — React/Vite en src/UI/cryologistics21.
+  # Frontend — React/Vite project under src/UI/cryologistics21.
   - package-ecosystem: npm
     directory: "/src/UI/cryologistics21"
     schedule:
@@ -66,7 +71,7 @@ updates:
       - dependencies
       - frontend
 
-  # Workflows de GitHub Actions.
+  # GitHub Actions workflows.
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
@@ -80,7 +85,7 @@ updates:
       - dependencies
       - ci
 
-  # Imágenes Docker de los microservicios.
+  # Docker base images of the microservices.
   - package-ecosystem: docker
     directory: "/src/Services/Users/Cryologistics21.Services.Users.Api"
     schedule:
