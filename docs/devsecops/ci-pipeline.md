@@ -70,6 +70,23 @@ Los umbrales se configuran en SonarCloud (gate "Sonar way"), no en el YAML. La c
 - Los tests y archivos de configuración del frontend se excluyen de la cobertura vía `sonar-coverage-exclusions` en `ci.yml`.
 - La cobertura solo se reporta: la lógica real del frontend necesita tests propios para superar el umbral de > 80 %.
 
+## Actualizaciones automáticas (Dependabot)
+
+`.github/dependabot.yml` abre Pull Requests de actualización de dependencias. Es el complemento del pipeline: **Dependabot propone el cambio, `ci.yml` lo verifica** (build, tests, SonarCloud Quality Gate, SCA y Trivy).
+
+| Ecosistema | Directorio | Alcance |
+| --- | --- | --- |
+| `nuget` | `/` | `Cryologistics21.slnx` — paquetes .NET centralizados en `Directory.Packages.props` |
+| `npm` | `/src/UI/cryologistics21` | Frontend React/Vite |
+| `github-actions` | `/` | Versiones de las acciones en `.github/workflows/` |
+| `docker` | `/src/Services/Users/…Users.Api`, `/src/API/…Gateway` | Tags base de las imágenes de los microservicios |
+
+- Programación: **lunes 06:00 (America/Mexico_City)**, con *cooldown* implícito de 3 días de GitHub.
+- Los updates de seguridad (vulnerabilidades) no respetan el *cooldown* y llegan según el calendario de GitHub.
+- `groups` agrupa por proveedor para no abrir un PR por paquete.
+
+> Los PRs de Dependabot **no** están exentos del `CI gate`: el check requerido sigue siendo el mismo.
+
 ## Protección de `main`
 
 Ruleset activo sobre `main`:
