@@ -81,6 +81,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - service: gateway
+            dockerfile: src/API/Cryologistics21.Gateway/Dockerfile
           - service: users-api
             dockerfile: src/Services/Users/Cryologistics21.Services.Users.Api/Dockerfile
           # - service: <nuevo>-api
