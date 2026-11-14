@@ -15,9 +15,10 @@ version: 2
 
 updates:
   # .NET — solution lives at the repository root.
+  # The solution file is auto-discovered; `solution` is not part of the
+  # dependabot.yml schema, so it must not be set here.
   - package-ecosystem: nuget
     directory: "/"
-    solution: "Cryologistics21.slnx"
     schedule:
       interval: weekly
       day: monday
