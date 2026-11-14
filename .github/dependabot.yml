@@ -23,7 +23,7 @@ updates:
       interval: weekly
       day: monday
       time: "06:00"
-      timezone: America/Mexico_City
+      timezone: UTC
     open-pull-requests-limit: 5
     groups:
       # Group by vendor so a single PR covers a whole provider.
@@ -57,7 +57,7 @@ updates:
       interval: weekly
       day: monday
       time: "06:00"
-      timezone: America/Mexico_City
+      timezone: UTC
     open-pull-requests-limit: 5
     groups:
       frontend-deps:
@@ -79,7 +79,7 @@ updates:
       interval: weekly
       day: monday
       time: "06:00"
-      timezone: America/Mexico_City
+      timezone: UTC
     commit-message:
       prefix: "chore(deps)"
     labels:
@@ -93,7 +93,7 @@ updates:
       interval: weekly
       day: monday
       time: "06:00"
-      timezone: America/Mexico_City
+      timezone: UTC
     commit-message:
       prefix: "chore(deps)"
     labels:
@@ -106,9 +106,10 @@ updates:
       interval: weekly
       day: monday
       time: "06:00"
-      timezone: America/Mexico_City
+      timezone: UTC
     commit-message:
       prefix: "chore(deps)"
     labels:
       - dependencies
       - docker
+

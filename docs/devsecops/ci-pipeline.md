@@ -81,7 +81,7 @@ Los umbrales se configuran en SonarCloud (gate "Sonar way"), no en el YAML. La c
 | `github-actions` | `/` | Versiones de las acciones en `.github/workflows/` |
 | `docker` | `/src/Services/Users/…Users.Api`, `/src/API/…Gateway` | Tags base de las imágenes de los microservicios |
 
-- Programación: **lunes 06:00 (America/Mexico_City)**, con *cooldown* implícito de 3 días de GitHub.
+- Programación: **lunes 06:00 UTC**, con *cooldown* implícito de 3 días de GitHub.
 - Los updates de seguridad (vulnerabilidades) no respetan el *cooldown* y llegan según el calendario de GitHub.
 - `groups` agrupa por proveedor para no abrir un PR por paquete.
 
