@@ -18,3 +18,4 @@ Los ADRs documentan las decisiones de arquitectura significativas: el contexto e
 | [ADR-08](ADR-08-eventual-consistency.md)            | Garantía de Consistencia Eventual Write/Read para usuario QA           | ✅ Aceptado |
 | [ADR-09](ADR-09-data-retention.md)                  | Estrategia de retención de datos: Hot / Warm / Cold                    | ✅ Aceptado |
 | [ADR-10](ADR-10-outbox-inbox-integration-events.md) | Publicación Garantizada de Eventos de Integración (Outbox / Inbox)     | ✅ Aceptado |
+| [ADR-11](ADR-11-ci-devsecops.md)                    | CI / DevSecOps con GitHub Actions y SonarCloud                         | ✅ Aceptado |

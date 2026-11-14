@@ -6,11 +6,11 @@ Pipeline de Integración Continua de CryoLogistics 21 en **GitHub Actions**. Cad
 
 ## Decisiones
 
-| Decisión | Alternativa descartada | Motivo |
-| --- | --- | --- |
-| GitHub Actions | Jenkins autoalojado | Status checks y ejecuciones visibles públicamente en el repositorio |
-| SonarCloud | SonarQube Community local | PR decoration, análisis de ramas/PRs y taint analysis gratuitos en repos públicos |
-| Reusable workflows en un repo aparte | Workflows copiados en este repo | Reutilización entre proyectos y versionado (`@v1`) |
+| Decisión                             | Alternativa descartada          | Motivo                                                                            |
+| ------------------------------------ | ------------------------------- | --------------------------------------------------------------------------------- |
+| GitHub Actions                       | Jenkins autoalojado             | Status checks y ejecuciones visibles públicamente en el repositorio               |
+| SonarCloud                           | SonarQube Community local       | PR decoration, análisis de ramas/PRs y taint analysis gratuitos en repos públicos |
+| Reusable workflows en un repo aparte | Workflows copiados en este repo | Reutilización entre proyectos y versionado (`@v1`)                                |
 
 ## Arquitectura
 
@@ -29,14 +29,14 @@ flowchart LR
     G --> H
 ```
 
-| Etapa | Herramienta | Workflow reutilizable | Falla si… |
-| --- | --- | --- | --- |
-| 1. Secretos | Yelp `detect-secrets` | `secret-scan-yelp.yml` | Hay un posible secreto no auditado en `.secrets.baseline` |
-| 2. SAST | Snyk Code | `sast-scan-synk.yml` | Hallazgos de severidad ≥ High |
-| 2. SCA | Snyk + `dotnet list package --vulnerable` | `sca-scan-synk.yml` | Dependencias vulnerables ≥ High |
-| 2. Dependency review | `dependency-review-action` | `dependency-review.yml` | El PR añade dependencias vulnerables |
-| 3. Build y calidad | .NET + dotnet-coverage + tests del frontend (opcional) + SonarCloud | `dotnet-build-sonar.yml` | Falla compilación, tests (.NET o frontend) o el Quality Gate |
-| 4. Contenedores | Docker + Trivy | `container-scan-trivy.yml` | CVE High/Critical con parche disponible |
+| Etapa                | Herramienta                                                         | Workflow reutilizable      | Falla si…                                                    |
+| -------------------- | ------------------------------------------------------------------- | -------------------------- | ------------------------------------------------------------ |
+| 1. Secretos          | Yelp `detect-secrets`                                               | `secret-scan-yelp.yml`     | Hay un posible secreto no auditado en `.secrets.baseline`    |
+| 2. SAST              | Snyk Code                                                           | `sast-scan-synk.yml`       | Hallazgos de severidad ≥ High                                |
+| 2. SCA               | Snyk + `dotnet list package --vulnerable`                           | `sca-scan-synk.yml`        | Dependencias vulnerables ≥ High                              |
+| 2. Dependency review | `dependency-review-action`                                          | `dependency-review.yml`    | El PR añade dependencias vulnerables                         |
+| 3. Build y calidad   | .NET + dotnet-coverage + tests del frontend (opcional) + SonarCloud | `dotnet-build-sonar.yml`   | Falla compilación, tests (.NET o frontend) o el Quality Gate |
+| 4. Contenedores      | Docker + Trivy                                                      | `container-scan-trivy.yml` | CVE High/Critical con parche disponible                      |
 
 Los resultados de seguridad se publican como SARIF en **Security → Code scanning**. El job `CI gate` agrega todo y es el único check requerido.
 
@@ -44,13 +44,13 @@ Los resultados de seguridad se publican como SARIF en **Security → Code scanni
 
 Evaluados sobre **código nuevo**. El pipeline espera el resultado del gate (`sonar.qualitygate.wait=true`).
 
-| Métrica | Umbral |
-| --- | --- |
-| Cobertura | > 80 % |
-| Security Rating | A |
-| Reliability Rating | A |
-| Maintainability Rating | A |
-| Líneas duplicadas | < 3 % |
+| Métrica                | Umbral |
+| ---------------------- | ------ |
+| Cobertura              | > 80 % |
+| Security Rating        | A      |
+| Reliability Rating     | A      |
+| Maintainability Rating | A      |
+| Líneas duplicadas      | < 3 %  |
 
 Los umbrales se configuran en SonarCloud (gate "Sonar way"), no en el YAML. La cobertura excluye AppHost, ServiceDefaults, migraciones y `Program.cs`.
 
@@ -58,17 +58,34 @@ Los umbrales se configuran en SonarCloud (gate "Sonar way"), no en el YAML. La c
 
 `dotnet-sonarscanner` también analiza los archivos JS/TS del repositorio. Si solo se reporta la cobertura de .NET, todo el código nuevo de `UI/` cuenta con 0 % y arrastra el Quality Gate. Por eso la etapa 3 admite pasos opcionales para el frontend, que solo se ejecutan si se informa `frontend-working-directory`:
 
-| Input | Uso |
-| --- | --- |
+| Input                        | Uso                                                                                 |
+| ---------------------------- | ----------------------------------------------------------------------------------- |
 | `frontend-working-directory` | Directorio con `package.json` y `package-lock.json` (activa los pasos del frontend) |
-| `frontend-test-command` | Comando que genera la cobertura (por defecto `npm ci && npm run test:coverage`) |
-| `frontend-lcov-path` | Ruta del `lcov.info`, relativa a la raíz del repo |
-| `frontend-node-version` | Versión de Node.js (por defecto `22`) |
+| `frontend-test-command`      | Comando que genera la cobertura (por defecto `npm ci && npm run test:coverage`)     |
+| `frontend-lcov-path`         | Ruta del `lcov.info`, relativa a la raíz del repo                                   |
+| `frontend-node-version`      | Versión de Node.js (por defecto `22`)                                               |
 
 - Las rutas `SF:` del `lcov.info` se normalizan para que Sonar las resuelva desde la raíz del repo.
 - El comando de tests se pasa por variable de entorno, no interpolado en el shell.
 - Los tests y archivos de configuración del frontend se excluyen de la cobertura vía `sonar-coverage-exclusions` en `ci.yml`.
 - La cobertura solo se reporta: la lógica real del frontend necesita tests propios para superar el umbral de > 80 %.
+
+## Actualizaciones automáticas (Dependabot)
+
+`.github/dependabot.yml` abre Pull Requests de actualización de dependencias.
+
+| Ecosistema       | Directorio                                            | Alcance                                                                            |
+| ---------------- | ----------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| `nuget`          | `/`                                                   | `Cryologistics21.slnx` — paquetes .NET centralizados en `Directory.Packages.props` |
+| `npm`            | `/src/UI/cryologistics21`                             | Frontend React/Vite                                                                |
+| `github-actions` | `/`                                                   | Versiones de las acciones en `.github/workflows/`                                  |
+| `docker`         | `/src/Services/Users/…Users.Api`, `/src/API/…Gateway` | Tags base de las imágenes de los microservicios                                    |
+
+- Programación: **lunes 06:00 UTC**, con *cooldown* implícito de 3 días de GitHub.
+- Los updates de seguridad (vulnerabilidades) no respetan el *cooldown* y llegan según el calendario de GitHub.
+- `groups` agrupa por proveedor para no abrir un PR por paquete.
+
+> Los PRs de Dependabot **no** están exentos del `CI gate`: el check requerido sigue siendo el mismo.
 
 ## Protección de `main`
 
@@ -81,9 +98,9 @@ Ruleset activo sobre `main`:
 
 ## Secrets
 
-| Secret | Uso |
-| --- | --- |
-| `SNYK_TOKEN` | SAST y SCA |
+| Secret        | Uso                    |
+| ------------- | ---------------------- |
+| `SNYK_TOKEN`  | SAST y SCA             |
 | `SONAR_TOKEN` | Análisis en SonarCloud |
 
 ## Añadir un microservicio
