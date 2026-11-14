@@ -1,7 +1,7 @@
 # See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
-FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:11.0 AS base
 RUN apt-get update \
 	&& apt-get install -y --no-install-recommends --only-upgrade apt libapt-pkg6.0t64 libpcre2-8-0 libc6 libc-bin perl-base \
 	&& rm -rf /var/lib/apt/lists/*
