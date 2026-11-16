@@ -60,8 +60,8 @@
     <PackageVersion Include="Testcontainers.PostgreSql" Version="4.16.0" />
     <PackageVersion Include="Testcontainers.Redis" Version="4.16.0" />
     <PackageVersion Include="Ulid" Version="1.4.1" />
-    <PackageVersion Include="WolverineFx" Version="6.64.0" />
-    <PackageVersion Include="WolverineFx.Kafka" Version="6.64.0" />
+    <PackageVersion Include="WolverineFx" Version="6.64.1" />
+    <PackageVersion Include="WolverineFx.Kafka" Version="6.64.1" />
     <PackageVersion Include="WolverineFx.Postgresql" Version="6.64.0" />
     <PackageVersion Include="WolverineFx.RuntimeCompilation" Version="6.64.0" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="4.0.1" />
