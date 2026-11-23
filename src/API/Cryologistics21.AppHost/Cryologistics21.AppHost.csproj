@@ -14,6 +14,7 @@
     <PackageReference Include="Aspire.Hosting.Redis" />
     <PackageReference Include="Aspire.Hosting.Seq" />
     <PackageReference Include="DotNetEnv" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" VersionOverride="11.0.0" />
   </ItemGroup>
 
   <ItemGroup>
