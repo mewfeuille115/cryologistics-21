@@ -58,7 +58,7 @@ jobs:
   build:
     name: 3 · Build, tests and SonarCloud
     needs: [sast, sca]
-    uses: mewfeuille115/reusable-workflows/.github/workflows/dotnet-build-sonar.yml@v1.2
+    uses: mewfeuille115/reusable-workflows/.github/workflows/dotnet-build-sonar.yml@v1.3
     permissions:
       contents: read
     with:
