@@ -43,6 +43,7 @@ jobs:
       security-events: write
     with:
       solution-path: Cryologistics21.slnx
+      dotnet-version: '11.0.x'
     secrets:
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
@@ -62,6 +63,7 @@ jobs:
       contents: read
     with:
       solution-path: Cryologistics21.slnx
+      dotnet-version: '11.0.x'
       sonar-project-key: mewfeuille115_cryologistics-21
       sonar-organization: mewfeuille115
       sonar-coverage-exclusions: '**/*AppHost*/**,**/*ServiceDefaults*/**,**/Migrations/**,**/Program.cs,src/UI/**/*.test.*,src/UI/**/*.spec.*,src/UI/**/*.d.ts,src/UI/**/main.tsx,src/UI/**/vite.config.*'
