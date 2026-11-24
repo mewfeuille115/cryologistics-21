@@ -72,7 +72,7 @@ IResourceBuilder<DotnetProjectResource> gateway = builder.AddDotnetProject("gate
 	.WaitFor(usersApi);
 
 builder.AddViteApp("frontend", "../../UI/cryologistics21")
-	.WithNpm(installCommand: "ci", installArgs: ["--include=dev"])
+	.WithNpm(installCommand: "install", installArgs: ["--include=dev"])
 	.WithEnvironment("NODE_ENV", "development")
 	.WithExternalHttpEndpoints()
 	.WithReference(gateway)
