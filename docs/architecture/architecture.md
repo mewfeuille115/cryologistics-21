@@ -62,19 +62,19 @@ C4Container
 
     System_Boundary(cryo, "CryoLogistics 21") {
         Container(website, "CryoLogistics 21 Website", "React", "Dashboard de monitoreo en tiempo real. Gestión de envíos. Firma electrónica de lotes")
-        Container(gateway, "API Gateway", ".NET 10", "Punto de entrada único. Enruta peticiones y valida JWT")
-        Container(users_svc, "Users Service", ".NET 10", "Gestión de usuarios y asignación de roles RBAC via Keycloak")
+        Container(gateway, "API Gateway", ".NET 11", "Punto de entrada único. Enruta peticiones y valida JWT")
+        Container(users_svc, "Users Service", ".NET 11", "Gestión de usuarios y asignación de roles RBAC via Keycloak")
 
-        Container(excursion_engine, "Excursion Engine", ".NET 10 Worker", "Detecta excursiones térmicas en menos de 10s. Calcula MKT. Dispara alertas")
-        Container(shipments_svc, "Shipments Service", ".NET 10", "Ciclo de vida del envío: crear, asignar sensores, cerrar")
-        Container(release_svc, "Batch Release Service", ".NET 10", "Signing Challenge CFR-11. Principio de Cuatro Ojos. Libera o rechaza lotes")
+        Container(excursion_engine, "Excursion Engine", ".NET 11 Worker", "Detecta excursiones térmicas en menos de 10s. Calcula MKT. Dispara alertas")
+        Container(shipments_svc, "Shipments Service", ".NET 11", "Ciclo de vida del envío: crear, asignar sensores, cerrar")
+        Container(release_svc, "Batch Release Service", ".NET 11", "Signing Challenge CFR-11. Principio de Cuatro Ojos. Libera o rechaza lotes")
         
         ContainerDb(excursion_db, "Excursion DB", "PostgreSQL", "Event Store del Excursion Engine. Registro de excursiones y cálculo MKT")
         ContainerDb(shipments_db, "Shipments DB", "PostgreSQL", "Event Store del Shipments Service. Hash SHA-256 encadenado")
         ContainerDb(release_db, "Batch Release DB", "PostgreSQL", "Event Store del Batch Release Service. Hash SHA-256 encadenado")
         
-        Container(telemetry_ingest, "Telemetry Ingestion Service", ".NET 10", "Recibe telemetría IoT y backfill. Persiste en Event Store + Outbox. Proyecta estado en Redis")
-        Container(telemetry_query, "Telemetry Query Service", ".NET 10", "Historial térmico. Estado actual. Endpoint SSE via Redis Pub/Sub")
+        Container(telemetry_ingest, "Telemetry Ingestion Service", ".NET 11", "Recibe telemetría IoT y backfill. Persiste en Event Store + Outbox. Proyecta estado en Redis")
+        Container(telemetry_query, "Telemetry Query Service", ".NET 11", "Historial térmico. Estado actual. Endpoint SSE via Redis Pub/Sub")
 
         ContainerDb(redis, "Read Store", "Redis", "Ingestion escribe (HSET+ZADD+PUBLISH). Query lee y expone SSE (SUBSCRIBE)")
         ContainerQueue(kafka, "Message Bus", "Apache Kafka", "Bus de integración asíncrona. Outbox/Inbox pattern")
@@ -118,13 +118,13 @@ C4Container
 | Contenedor                      | Tecnología               | Responsabilidad principal                                                                                                               |
 | ------------------------------- | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
 | **Website**                     | React                    | Dashboard de monitoreo en tiempo real. Gestión de envíos. Firma electrónica de lotes. Consume SSE del API Gateway                       |
-| **API Gateway**                 | .NET 10 — Web API        | Punto de entrada único. Enruta al microservicio correspondiente. Valida JWT                                                             |
-| **Telemetry Ingestion Service** | .NET 10 — Web API        | Recibe telemetría IoT y backfill. Persiste en Event Store + Outbox. Proyecta en Redis. Publica `TelemetryRecorded` a Kafka (FR-1, FR-5) |
-| **Telemetry Query Service**     | .NET 10 — Web API        | Historial térmico paginado, estado actual, endpoint SSE via Redis Pub/Sub. Consume `BatchReleased` para mantener read model actualizado |
-| **Shipments Service**           | .NET 10 — Web API        | Ciclo de vida del envío: creación, asignación de sensores, cierre                                                                       |
-| **Batch Release Service**       | .NET 10 — Web API        | Signing Challenge (CFR-11), 4-Eyes Principle, liberación/rechazo de lotes                                                               |
-| **Users Service**               | .NET 10 — Web API        | Gestión de usuarios y roles RBAC. Único punto de acceso a Keycloak (RBAC + Signing Challenge ROPC)                                      |
-| **Excursion Engine**            | .NET 10 — Worker Service | Detecta excursiones < 10s, calcula MKT, dispara alertas externas (FR-2, FR-6)                                                           |
+| **API Gateway**                 | .NET 11 — Web API        | Punto de entrada único. Enruta al microservicio correspondiente. Valida JWT                                                             |
+| **Telemetry Ingestion Service** | .NET 11 — Web API        | Recibe telemetría IoT y backfill. Persiste en Event Store + Outbox. Proyecta en Redis. Publica `TelemetryRecorded` a Kafka (FR-1, FR-5) |
+| **Telemetry Query Service**     | .NET 11 — Web API        | Historial térmico paginado, estado actual, endpoint SSE via Redis Pub/Sub. Consume `BatchReleased` para mantener read model actualizado |
+| **Shipments Service**           | .NET 11 — Web API        | Ciclo de vida del envío: creación, asignación de sensores, cierre                                                                       |
+| **Batch Release Service**       | .NET 11 — Web API        | Signing Challenge (CFR-11), 4-Eyes Principle, liberación/rechazo de lotes                                                               |
+| **Users Service**               | .NET 11 — Web API        | Gestión de usuarios y roles RBAC. Único punto de acceso a Keycloak (RBAC + Signing Challenge ROPC)                                      |
+| **Excursion Engine**            | .NET 11 — Worker Service | Detecta excursiones < 10s, calcula MKT, dispara alertas externas (FR-2, FR-6)                                                           |
 | **Telemetry DB**                | PostgreSQL               | Event Store compartido — Ingestion escribe, Query lee historial paginado. SHA-256 encadenado y tabla outbox                             |
 | **Shipments DB**                | PostgreSQL               | Event Store del Shipments Service con SHA-256 encadenado y tabla outbox                                                                 |
 | **Batch Release DB**            | PostgreSQL               | Event Store del Batch Release Service con SHA-256 encadenado                                                                            |
@@ -151,11 +151,11 @@ C4Dynamic
 
     System_Boundary(cryo, "CryoLogistics 21") {
         Container(website, "CryoLogistics 21 Website", "React", "")
-        Container(gateway, "API Gateway", ".NET 10", "")
+        Container(gateway, "API Gateway", ".NET 11", "")
         ContainerQueue(kafka, "Message Bus", "Apache Kafka", "")
         ContainerDb(redis, "Read Store", "Redis", "")
-        Container(telemetry_query, "Telemetry Query Service", ".NET 10", "")
-        Container(telemetry_ingest, "Telemetry Ingestion Service", ".NET 10", "")
+        Container(telemetry_query, "Telemetry Query Service", ".NET 11", "")
+        Container(telemetry_ingest, "Telemetry Ingestion Service", ".NET 11", "")
         ContainerDb(telemetry_db, "Telemetry DB", "PostgreSQL", "")
     }
 
@@ -193,7 +193,7 @@ C4Dynamic
 
     System_Boundary(cryo, "CryoLogistics 21") {
         ContainerQueue(kafka, "Message Bus", "Apache Kafka", "")
-        Container(excursion_engine, "Excursion Engine", ".NET 10 Worker", "")
+        Container(excursion_engine, "Excursion Engine", ".NET 11 Worker", "")
         ContainerDb(excursion_db, "Excursion DB", "PostgreSQL", "")
     }
 
@@ -221,10 +221,10 @@ C4Dynamic
     
     System_Boundary(cryo, "CryoLogistics 21") {
         Container(website, "CryoLogistics 21 Website", "React", "")
-        Container(gateway, "API Gateway", ".NET 10", "")
-        Container(release_svc, "Batch Release Service", ".NET 10", "")
+        Container(gateway, "API Gateway", ".NET 11", "")
+        Container(release_svc, "Batch Release Service", ".NET 11", "")
         ContainerDb(release_db, "Batch Release DB", "PostgreSQL", "")
-        Container(users_svc, "Users Service", ".NET 10", "")
+        Container(users_svc, "Users Service", ".NET 11", "")
         ContainerQueue(kafka, "Message Bus", "Apache Kafka", "")
     }
 
@@ -262,11 +262,11 @@ C4Dynamic
 
     Person(operator, "Operador de Logística", "")
     Container(website, "CryoLogistics 21 Website", "React", "")
-    Container(gateway, "API Gateway", ".NET 10", "")
-    Container(shipments_svc, "Shipments Service", ".NET 10", "")
+    Container(gateway, "API Gateway", ".NET 11", "")
+    Container(shipments_svc, "Shipments Service", ".NET 11", "")
     ContainerDb(shipments_db, "Shipments DB", "PostgreSQL", "")
     ContainerQueue(kafka, "Message Bus", "Apache Kafka", "")
-    Container(release_svc, "Batch Release Service", ".NET 10", "")
+    Container(release_svc, "Batch Release Service", ".NET 11", "")
 
     Rel(operator, website, "Crea nuevo envío", "HTTPS")
     Rel(website, gateway, "POST /api/shipments", "HTTPS")
