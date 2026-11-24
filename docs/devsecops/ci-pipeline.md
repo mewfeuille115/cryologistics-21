@@ -116,7 +116,7 @@ Ruleset activo sobre `main`:
 ## Notas técnicas
 
 - **Proyecto de frontend (`.esproj`):** `dotnet restore` no lo soporta, así que el CI crea una copia temporal de la solución sin él.
-- **Tests:** xunit.v3 sobre Microsoft Testing Platform. `global.json` activa el modo MTP de `dotnet test` (.NET 10) y la cobertura se recoge con `dotnet-coverage` en formato XML.
+- **Tests:** xunit.v3 sobre Microsoft Testing Platform. `global.json` activa el modo MTP de `dotnet test` (.NET 11) y la cobertura se recoge con `dotnet-coverage` en formato XML.
 - **Falsos positivos de secretos:** se registran en `.secrets.baseline` (auditados, rutas con `/`).
 - **Trivy:** usa `ignore-unfixed`; solo bloquean los CVE con parche disponible.
 

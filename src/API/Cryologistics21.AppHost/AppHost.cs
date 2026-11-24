@@ -1,3 +1,5 @@
+using Aspire.Hosting.Dotnet;
+
 IDistributedApplicationBuilder builder = DistributedApplication.CreateBuilder(args);
 
 string repoRoot = Path.GetFullPath(Path.Combine(builder.AppHostDirectory, "..", "..", ".."));
@@ -45,7 +47,7 @@ IResourceBuilder<PostgresServerResource> usersPostgres = builder.AddPostgres("us
 
 IResourceBuilder<PostgresDatabaseResource> usersDb = usersPostgres.AddDatabase("users-db");
 
-IResourceBuilder<ProjectResource> usersApi = builder.AddProject<Projects.Cryologistics21_Services_Users_Api>("users-api")
+IResourceBuilder<DotnetProjectResource> usersApi = builder.AddDotnetProject("users-api", "../../Services/Users/Cryologistics21.Services.Users.Api/Cryologistics21.Services.Users.Api.csproj")	
 	.WithHttpsEndpoint()
 	.WithEnvironment("KeyCloak__PublicClientSecret", apiClientSecret)
 	.WithEnvironment("KeyCloak__ConfidentialClientSecret", adminClientSecret)
@@ -60,7 +62,7 @@ IResourceBuilder<ProjectResource> usersApi = builder.AddProject<Projects.Cryolog
 	.WaitFor(keycloak)
 	.WaitFor(usersDb);
 
-IResourceBuilder<ProjectResource> gateway = builder.AddProject<Projects.Cryologistics21_Gateway>("gateway")
+IResourceBuilder<DotnetProjectResource> gateway = builder.AddDotnetProject("gateway", "../Cryologistics21.Gateway/Cryologistics21.Gateway.csproj")
 	.WithExternalHttpEndpoints()
 	.WithReference(seq)
 	.WithReference(keycloak)

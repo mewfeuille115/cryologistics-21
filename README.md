@@ -108,7 +108,7 @@ Donde `ΔH` es la energía de activación del producto y `R` es la constante de 
 
 | Capa                            | Tecnología                                 | ADR    | Justificación                                                                                                             |
 | ------------------------------- | ------------------------------------------ | ------ | ------------------------------------------------------------------------------------------------------------------------- |
-| **Runtime**                     | .NET 10 / C#                               | —      | LTS, Clean Architecture, handlers manuales sin librería de mediación.                                                     |
+| **Runtime**                     | .NET 11 / C#                               | —      | LTS, Clean Architecture, handlers manuales sin librería de mediación.                                                     |
 | **Write Store (Event Store)**   | PostgreSQL                                 | ADR-01 | Garantía ACID, implementación propia (sin Marten/EventStoreDB), inmutabilidad nativa.                                     |
 | **Read Store (Proyecciones)**   | Redis                                      | —      | Latencia ultrabaja (< 1ms). `HSET` para estado actual, `ZADD` para historial por ventana.                                 |
 | **Mensajería / Bus de Eventos** | Apache Kafka                               | ADR-02 | Replay nativo por offset (Backfilling FR-5), retención configurable, soporta 100k sensores (NFR-5).                       |
